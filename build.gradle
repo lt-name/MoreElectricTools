@@ -80,10 +80,10 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
     // deobfCompile "mezz.jei:jei_1.12.2:4.13.1.220"
     implementation fg.deobf("curse.maven:jei-238222:2635239")
-    compile files ("libs/industrialcraft-2-2.8.188-ex112-dev.jar")
+    compile files ("libs/industrialcraft-2-2.8.222-ex112-dev.jar")
     compile files ("libs/SlashBlade-mc1.12-r32-deobf.jar")
     // deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"
     implementation fg.deobf("curse.maven:baubles-227083:2518667")

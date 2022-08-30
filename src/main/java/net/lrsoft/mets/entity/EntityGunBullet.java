@@ -1,6 +1,7 @@
 package net.lrsoft.mets.entity;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.Nullable;
 
@@ -58,6 +59,8 @@ public class EntityGunBullet extends Entity implements IProjectile{
 	protected int maxExistTicks;
 	protected float power;
 	protected float velocity;
+
+	private static AtomicInteger nowSpawnCount = new AtomicInteger();
 	
 	public EntityGunBullet(World world, EntityPlayer owner, float power, int maxTick) {
 		super(world);
@@ -68,6 +71,8 @@ public class EntityGunBullet extends Entity implements IProjectile{
 		setPosition(owner.posX, owner.posY + (double)shooter.getEyeHeight() - 0.1, owner.posZ);
 		this.power = power;
 		this.maxExistTicks = maxTick;
+
+		this.checkSpawnCount();
 	}
 	
 	public EntityGunBullet(World world, Vec3d pos, float power, int maxTick, boolean isMachineShoot) {
@@ -81,6 +86,8 @@ public class EntityGunBullet extends Entity implements IProjectile{
 		this.power = power;
 		this.maxExistTicks = maxTick;
 		setMachineShoot(isMachineShoot);
+
+		this.checkSpawnCount();
 	}
 
 	public EntityGunBullet(World world)
@@ -90,9 +97,27 @@ public class EntityGunBullet extends Entity implements IProjectile{
 		this.power = 5.0f;
 		this.maxExistTicks = 300;
 		this.ticksInAir = 0;
+
+		this.checkSpawnCount();
 	}
-	
-	public void onUpdate() 
+
+	//TODO 优化
+	public void checkSpawnCount()
+	{
+		if (nowSpawnCount.addAndGet(1) > 3000)
+		{
+			this.setDead();
+		}
+	}
+
+	@Override
+	public void setDead()
+	{
+		super.setDead();
+		nowSpawnCount.addAndGet(-1);
+	}
+
+	public void onUpdate()
 	{
 		super.onUpdate();
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)

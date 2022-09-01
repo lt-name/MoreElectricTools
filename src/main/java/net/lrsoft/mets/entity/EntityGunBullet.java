@@ -1,24 +1,14 @@
 package net.lrsoft.mets.entity;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.annotation.Nullable;
-
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-
-import ic2.core.util.Vector3;
-import net.lrsoft.mets.blade.EntityDriveEx;
 import net.lrsoft.mets.renderer.particle.EntityParticleSpray;
 import net.lrsoft.mets.util.MathUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
-import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -26,12 +16,12 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class EntityGunBullet extends Entity implements IProjectile{
 	public static final Predicate<Entity> GUN_TARGETS = Predicates.and(EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, new Predicate<Entity>()
@@ -104,7 +94,7 @@ public class EntityGunBullet extends Entity implements IProjectile{
 	//TODO 优化
 	public void checkSpawnCount()
 	{
-		if (nowSpawnCount.addAndGet(1) > 3000)
+		if (nowSpawnCount.incrementAndGet() > 5000)
 		{
 			this.setDead();
 		}
@@ -114,7 +104,7 @@ public class EntityGunBullet extends Entity implements IProjectile{
 	public void setDead()
 	{
 		super.setDead();
-		nowSpawnCount.addAndGet(-1);
+		nowSpawnCount.decrementAndGet();
 	}
 
 	public void onUpdate()
